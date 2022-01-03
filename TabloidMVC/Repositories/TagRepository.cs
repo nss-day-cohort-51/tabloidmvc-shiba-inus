@@ -20,7 +20,8 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                      Select * from Tag";
+                      Select * from Tag
+                        ORDER BY name ASC";
                     
 
                     var tags = new List<Tag>();
