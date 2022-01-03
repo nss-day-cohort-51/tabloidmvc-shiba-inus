@@ -7,6 +7,8 @@ namespace TabloidMVC.Repositories
     public class CategoryRepository : BaseRepository, ICategoryRepository
     {
         public CategoryRepository(IConfiguration config) : base(config) { }
+
+
         public List<Category> GetAll()
         {
             using (var conn = Connection)
@@ -14,7 +16,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name FROM Category";
+                    cmd.CommandText = "SELECT id, name FROM Category ORDER BY name ASC";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
@@ -34,5 +36,33 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+
+
+        public void Add(Category category)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Category (
+                            name )
+                        OUTPUT INSERTED.ID
+                        VALUES (
+                            @name)";
+                    cmd.Parameters.AddWithValue("@name", category.Name);
+                    category.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+
+
+
+
+
+
     }
 }
