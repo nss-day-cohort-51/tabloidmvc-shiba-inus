@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
@@ -15,11 +16,49 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+            _userProfileRepository = userProfileRepository;
+        }
+
+        public IActionResult CommentDetails(int id)
+        {
+            var vm = new CommentViewModel();
+            vm.PostId = id;
+            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
+            return View(vm);
+        }
+        //get
+        public IActionResult AddComment(int id)
+        {
+            var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
+            Comment comment = new Comment()
+            {
+                PostId = id,
+                UserProfileId = userProfile.Id
+            };
+        return View(comment);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //post
+        public IActionResult AddComment(IFormCollection collection, Comment comment)
+        {
+            try
+            {
+                _commentRepository.Add(comment);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return View(comment);
+            }
         }
 
         public IActionResult Index()
