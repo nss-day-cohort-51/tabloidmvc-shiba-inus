@@ -89,6 +89,38 @@ namespace TabloidMVC.Controllers
             }
         }
 
+
+
+        // GET: CategoryController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            Category category = _categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return StatusCode(404);
+            }
+            return View(category);
+        }
+
+        // POST: CategoryController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                _categoryRepository.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
+
+
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
