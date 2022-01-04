@@ -80,7 +80,7 @@ namespace TabloidMVC.Controllers
             }
             catch (Exception ex)
             {
-                return View(tag);
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -98,7 +98,7 @@ namespace TabloidMVC.Controllers
         // POST: TagController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection, Tag tag)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace TabloidMVC.Controllers
             }
             catch (Exception ex)
             {
-                return View(tag);
+                return RedirectToAction(nameof(Index));
             }
         }
     }
