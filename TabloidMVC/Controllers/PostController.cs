@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 using System.Collections.Generic;
 using System;
+using TabloidMVC.Models;
 
 namespace TabloidMVC.Controllers
 {
@@ -57,7 +59,7 @@ namespace TabloidMVC.Controllers
         public IActionResult Create()
         {
             var vm = new PostCreateViewModel();
-            vm.CategoryOptions = _categoryRepository.GetAll();
+            vm.CategoryOptions = _categoryRepository.GetAllCategories();
             return View(vm);
         }
 
@@ -73,11 +75,67 @@ namespace TabloidMVC.Controllers
                 _postRepository.Add(vm.Post);
 
                 return RedirectToAction("Details", new { id = vm.Post.Id });
-            } 
+            }
             catch
             {
-                vm.CategoryOptions = _categoryRepository.GetAll();
+                vm.CategoryOptions = _categoryRepository.GetAllCategories();
                 return View(vm);
+            }
+        }
+
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            var post = _postRepository.GetPublishedPostById(id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        // POST: PostController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Post post)
+        {
+            try
+            {
+
+                _postRepository.Update(post);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(post);
+            }
+        }
+
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+
+            return View(post);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.Delete(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return View(post);
             }
         }
 
@@ -98,10 +156,11 @@ namespace TabloidMVC.Controllers
             var vm = new AddPostTagViewModel();
             vm.PostId = id;
             vm.Tags = _tagRepository.GetTagsAvailableForPost(id);
-            vm.PostTag = new PostTag() {
+            vm.PostTag = new PostTag()
+            {
                 PostId = id
             };
-            
+
             return View(vm);
         }
         [HttpPost]
