@@ -27,7 +27,7 @@ namespace TabloidMVC.Controllers
 
         public ActionResult Index()
         {
-            var categories = _categoryRepository.GetAll();
+            var categories = _categoryRepository.GetAllCategories();
             return View(categories);
         }
 
@@ -35,7 +35,8 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var categoryDetails = _categoryRepository.GetCategoryById(id);
+            return View(categoryDetails);
         }
 
 

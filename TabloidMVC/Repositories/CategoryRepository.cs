@@ -15,7 +15,7 @@ namespace TabloidMVC.Repositories
         public CategoryRepository(IConfiguration config) : base(config) { }
 
 
-        public List<Category> GetAll()
+        public List<Category> GetAllCategories()
         {
             using (var conn = Connection)
             {
