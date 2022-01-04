@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -146,6 +147,36 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return tags;
+                }
+            }
+        }
+
+        public List<Tag> GetTagsAvailableForPost(int postId)
+        {
+            List<Tag> allTags = GetAllTags();
+            List<Tag> postTags = GetTagsByPostId(postId);
+
+            return allTags.Where(tag => !postTags.Select(postTag => postTag.Id).Contains(tag.Id)).ToList();
+
+        }
+
+        public void AddPostTag(PostTag postTag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    INSERT INTO PostTag (TagId, PostId)
+                    OUTPUT INSERTED.ID
+                    VALUES (@tagId, @postId);
+                ";
+
+                    cmd.Parameters.AddWithValue("@tagId", postTag.TagId);
+                    cmd.Parameters.AddWithValue("@postId", postTag.PostId);
+
+                    int id = (int)cmd.ExecuteScalar();
                 }
             }
         }
