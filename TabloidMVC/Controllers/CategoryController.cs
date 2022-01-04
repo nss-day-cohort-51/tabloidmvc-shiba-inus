@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -27,8 +28,26 @@ namespace TabloidMVC.Controllers
         }
 
 
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-      
+        [HttpPost]
+        public IActionResult Create(Category category)
+        {
+            try
+            {
+                _categoryRepository.Add(category);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
 
 
         private int GetCurrentUserProfileId()
