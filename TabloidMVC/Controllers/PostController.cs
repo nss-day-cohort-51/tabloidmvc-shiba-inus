@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +21,52 @@ namespace TabloidMVC.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
+        private readonly ICommentRepository _commentRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
+          
+
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository,ITagRepository tagRepository)
+        )
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
-            _tagRepository = tagRepository;
+            _commentRepository = commentRepository;
+            _userProfileRepository = userProfileRepository;
+              _tagRepository = tagRepository;
         }
+
+        public IActionResult CommentDetails(int id)
+        {
+            var vm = new CommentViewModel();
+            vm.PostId = id;
+            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
+            return View(vm);
+        }
+        //get
+        public IActionResult AddComment(int id)
+        {
+            var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
+            Comment comment = new Comment()
+            {
+                PostId = id,
+                UserProfileId = userProfile.Id
+            };
+        return View(comment);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //post
+        public IActionResult AddComment(IFormCollection collection, Comment comment)
+        {
+            try
+            {
+                _commentRepository.Add(comment);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return View(comment);
+            }
 
         public IActionResult Index()
         {
