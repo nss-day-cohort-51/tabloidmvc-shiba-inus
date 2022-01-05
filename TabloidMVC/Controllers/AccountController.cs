@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,29 @@ namespace TabloidMVC.Controllers
                 new ClaimsPrincipal(claimsIdentity));
 
             return RedirectToAction("Index", "Home");
+        }
+        // GET: AccountController/Create
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: AccountController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(IFormCollection collection, UserProfile userProfile)
+        {
+            try
+            {
+                userProfile.UserTypeId = 2;
+                _userProfileRepository.Register(userProfile);
+                return RedirectToAction("Index", "Home");
+
+            }
+            catch (Exception ex)
+            {
+                return View(userProfile);
+            }
         }
 
         public async Task<IActionResult> Logout()
