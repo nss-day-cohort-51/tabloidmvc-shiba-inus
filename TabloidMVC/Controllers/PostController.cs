@@ -26,7 +26,6 @@ namespace TabloidMVC.Controllers
           
 
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository,ITagRepository tagRepository)
-        )
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
@@ -67,8 +66,8 @@ namespace TabloidMVC.Controllers
             {
                 return View(comment);
             }
-
-        public IActionResult Index()
+        }
+            public IActionResult Index()
         {
             var posts = _postRepository.GetAllPublishedPosts();
             return View(posts);
