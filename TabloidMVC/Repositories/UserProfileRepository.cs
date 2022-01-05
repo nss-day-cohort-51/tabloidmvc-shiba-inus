@@ -131,13 +131,13 @@ ORDER BY DisplayName ASC";
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                            ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+                            ImageLocation = reader.IsDBNull(reader.GetOrdinal("ImageLocation")) ? null : reader.GetString(reader.GetOrdinal("ImageLocation")),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                             UserType = new UserType()
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                                 Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                            },
+                            }
                         };
                     }
 
@@ -251,9 +251,5 @@ ORDER BY DisplayName ASC";
             throw new NotImplementedException();
         }
 
-        public void Details(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
