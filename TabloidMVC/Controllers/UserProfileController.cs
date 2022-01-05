@@ -28,9 +28,10 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: UserProfileController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
-            return View();
+            var userProfile = _userProfileRepository.GetById(id);
+            return View(userProfile);
         }
 
         // GET: UserProfileController/Create
@@ -58,7 +59,7 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Edit/5
         public ActionResult Edit(int id)
         {
-            UserProfile userProfile = _userProfileRepository.GetUserProfileById(id);
+            UserProfile userProfile = _userProfileRepository.GetById(id);
 
             if (userProfile == null)
             {
@@ -88,7 +89,7 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Delete/5
         public ActionResult Delete(int id)
         {
-            UserProfile userProfile = _userProfileRepository.GetUserProfileById(id);
+            UserProfile userProfile = _userProfileRepository.GetById(id);
             if (userProfile == null)
             {
                 return StatusCode(404);
