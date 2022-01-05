@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -67,7 +68,7 @@ namespace TabloidMVC.Controllers
                 userProfile.UserTypeId = 2;
                 _userProfileRepository.Register(userProfile);
                 return RedirectToAction("Index", "Home");
-                
+
             }
             catch (Exception ex)
             {
@@ -80,5 +81,7 @@ namespace TabloidMVC.Controllers
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
     }
 }

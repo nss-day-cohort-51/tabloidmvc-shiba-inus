@@ -10,11 +10,13 @@ namespace TabloidMVC.Repositories
     {
         List<UserProfile> GetAllUsers();
         UserProfile GetByEmail(string email);
+        UserProfile GetById(int id);
+        void Delete(int id);
+        void UpdateUserType(UserProfile user);
         void Register(UserProfile userProfile);
         void Details(int id);
         void CreateUserProfile(UserProfile userProfile);
         void Update(UserProfile profile);
-        void Delete(int id);
         UserProfile GetUserProfileById(int id);
     }
 }
