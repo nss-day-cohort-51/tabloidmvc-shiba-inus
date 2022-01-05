@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TabloidMVC.Models.Tag>
+﻿@model IEnumerable<TabloidMVC.Models.PostTag>
 
 @{
     ViewData["Title"] = "Manage Tags";
@@ -7,18 +7,11 @@
 <div class="container pt-5">
     <h1>Post Tags</h1>
 
-    <p>
-        <a class="btn btn-primary" asp-action="Create">New Post</a>
-    </p>
-
-    <p>
-        <a asp-action="Create">Add Tag</a>
-    </p>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.DisplayNameFor(model => model.Tag.Name)
                 </th>
                 <th></th>
             </tr>
@@ -26,20 +19,21 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tag.Name)
+                    </td>
+                    <td>
+                        <a asp-controller="PostTag" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
+
+    <p>
+        <a class="btn btn-primary" asp-action="AddPostTag" asp-route-id="@Model.ToList()[0].PostId">Add Tag</a>
+    </p>
 </div>

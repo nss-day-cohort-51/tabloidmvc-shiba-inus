@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TabloidMVC.Models.Post>
+﻿@model IEnumerable<TabloidMVC.Models.UserProfile>
 
 @{
     ViewData["Title"] = "Index";
@@ -8,23 +8,20 @@
 <div class="container pt-5">
     <h1>Posts</h1>
 
-    <p>
+    <!-- <p>
         <a class="btn btn-primary" asp-action="Create">New Post</a>
-    </p>
+    </p> -->
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Title)
+                    @Html.DisplayNameFor(model => model)Full Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserProfileId)
+                    @Html.DisplayNameFor(model => model)Display Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CategoryId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PublishDateTime)
+                    @Html.DisplayNameFor(model => model)User Type
                 </th>
                 <th></th>
             </tr>
@@ -34,16 +31,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
+                        @Html.DisplayFor(modelItem => item.DisplayName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Category.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishDateTime)
+                        @Html.DisplayFor(modelItem => item.UserTypeName)
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="View">
@@ -56,7 +50,7 @@
                             <i class="fas fa-trash"></i>
                         </a>
                         <div>
-                            <a asp-action="ManageTags" asp-route-id="@item.Id">Manage Tags</a>
+                            <a asp-action="ManageTags" asp-route-id="@item.Id">Manage User Profiles</a>
                         </div>
                     </td>
                 </tr>
