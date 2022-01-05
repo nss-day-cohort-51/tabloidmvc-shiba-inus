@@ -5,5 +5,8 @@ namespace TabloidMVC.Repositories
     public interface IUserProfileRepository
     {
         UserProfile GetByEmail(string email);
+        UserProfile GetById(int id);
+        void Delete(int id);
+        void Deactivate(UserProfile user);
     }
 }
