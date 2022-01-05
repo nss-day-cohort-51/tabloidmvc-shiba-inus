@@ -96,7 +96,25 @@ ORDER BY DisplayName ASC";
                 }
             }
         }
+        public void Register(UserProfile userProfile)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO UserProfile (FirstName, LastName, DisplayName, Email, CreateDateTime, UserTypeId)
+                                                    OUTPUT INSERTED.ID VALUES (@FirstName, @LastName, @DisplayName, @Email, GETDATE(), @UserTypeId)";
+                    cmd.Parameters.AddWithValue("@FirstName", userProfile.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", userProfile.LastName);
+                    cmd.Parameters.AddWithValue("@DisplayName", userProfile.DisplayName);
+                    cmd.Parameters.AddWithValue("@Email", userProfile.Email);
+                    cmd.Parameters.AddWithValue("@UserTypeId", userProfile.UserTypeId);
 
+                    userProfile.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
         public UserProfile GetUserProfileById(int id)
         {
             throw new NotImplementedException();
