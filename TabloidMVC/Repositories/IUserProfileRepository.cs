@@ -16,5 +16,8 @@ namespace TabloidMVC.Repositories
         void Register(UserProfile userProfile);
         void CreateUserProfile(UserProfile userProfile);
         void Update(UserProfile profile);
+        UserProfile GetUserProfileById(int id);
+        void Subscribe(int currentUserId, int id);
+        void Unsubscribe(int currentUserId, int id);
     }
 }

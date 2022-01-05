@@ -18,7 +18,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT p.Id as postId, c.Subject, c.Content, u.DisplayName, c.CreateDateTime
+                    cmd.CommandText = @"SELECT p.Id as postId, c.Subject, c.Content, u.DisplayName, c.CreateDateTime, UserProfileId
                                           FROM Comment c
                                             Join UserProfile u on c.UserProfileId = u.Id
                                             Join Post p on c.PostId = p.Id
@@ -35,6 +35,7 @@ namespace TabloidMVC.Repositories
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("createDateTime")),
                             UserProfile = new UserProfile()
                             {
+                                Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                                 DisplayName = reader.GetString(reader.GetOrdinal("displayName")),
                             },
                             Post = new Post()

@@ -172,7 +172,6 @@ namespace TabloidMVC.Repositories
             }
         }
 
-
         public void Add(Post post)
         {
             using (var conn = Connection)
@@ -287,6 +286,26 @@ namespace TabloidMVC.Repositories
                     }
                 }
             };
+        }
+
+        public bool GetIsSubscribed(int currentUserId, int providerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * From Subscription
+                                        WHERE SubscriberUserProfileId = @currentUserId AND ProviderUserProfileId = @providerId";
+                    cmd.Parameters.AddWithValue("@currentUserId", currentUserId);
+                    cmd.Parameters.AddWithValue("@providerId", providerId);
+
+                    cmd.ExecuteNonQuery();
+                    var reader = cmd.ExecuteReader();
+
+                    return reader.Read();
+                }
+            }
         }
     }
 }

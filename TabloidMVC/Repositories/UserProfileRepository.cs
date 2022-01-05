@@ -201,7 +201,45 @@ ORDER BY DisplayName ASC";
                 }
             }
         }
-       
+
+        public void Subscribe(int subscriberId, int providerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Subscription (SubscriberUserProfileId, ProviderUserProfileId, BeginDateTime)
+                                        VALUES (@SubscriberId, @ProviderId, GETDATE())";
+                    cmd.Parameters.AddWithValue("@SubscriberId", subscriberId);
+                    cmd.Parameters.AddWithValue("@ProviderId", providerId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+        public void Unsubscribe(int subscriberId, int providerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Subscription WHERE SubscriberUserProfileId = @SubscriberId AND ProviderUserProfileId = @ProviderId";
+                    cmd.Parameters.AddWithValue("@SubscriberId", subscriberId);
+                    cmd.Parameters.AddWithValue("@ProviderId", providerId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        public UserProfile GetUserProfileById(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Update(UserProfile profile)
         {
