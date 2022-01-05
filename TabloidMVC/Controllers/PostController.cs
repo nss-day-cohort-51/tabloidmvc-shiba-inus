@@ -18,21 +18,21 @@ namespace TabloidMVC.Controllers
     public class PostController : Controller
     {
         private readonly IPostRepository _postRepository;
+        private readonly IPostTagRepository _postTagRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ITagRepository _tagRepository;
-
         private readonly ICommentRepository _commentRepository;
         private readonly IUserProfileRepository _userProfileRepository;
-          
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository,ITagRepository tagRepository)
-        )
+
+        public PostController(IPostRepository postRepository, IPostTagRepository postTagRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
+            _postTagRepository = postTagRepository;
             _categoryRepository = categoryRepository;
             _commentRepository = commentRepository;
             _userProfileRepository = userProfileRepository;
-              _tagRepository = tagRepository;
+            _tagRepository = tagRepository;
         }
 
         public IActionResult CommentDetails(int id)
@@ -51,7 +51,7 @@ namespace TabloidMVC.Controllers
                 PostId = id,
                 UserProfileId = userProfile.Id
             };
-        return View(comment);
+            return View(comment);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -67,6 +67,7 @@ namespace TabloidMVC.Controllers
             {
                 return View(comment);
             }
+        }
 
         public IActionResult Index()
         {
@@ -188,8 +189,8 @@ namespace TabloidMVC.Controllers
 
         public IActionResult ManageTags(int id)
         {
-            List<Tag> tags = _tagRepository.GetTagsByPostId(id);
-            return View(tags);
+            List<PostTag> postTags = _postTagRepository.GetPostTagsByPostId(id);
+            return View(postTags);
         }
 
         public IActionResult AddPostTag(int id)
@@ -215,7 +216,7 @@ namespace TabloidMVC.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction(nameof(ManageTags), vm.PostId);
+                return RedirectToAction(nameof(ManageTags), new { id = vm.PostTag.PostId });
             }
         }
 
