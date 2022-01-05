@@ -1,12 +1,50 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
+using System.Data;
+using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace TabloidMVC.Repositories
 {
     public class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
         public UserProfileRepository(IConfiguration config) : base(config) { }
+
+        public List<UserProfile> GetAllUsers()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, FirstName, LastName, Email, DisplayName FROM UserProfile ORDER BY DisplayName ASC";
+
+                    var reader = cmd.ExecuteReader();
+
+                    var users = new List<UserProfile>();
+
+                    while (reader.Read())
+                    {
+                        users.Add(new UserProfile()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName"))
+                        });
+                    }
+                    reader.Close();
+
+                    return users;
+                }
+            }
+        }
+
 
         public UserProfile GetByEmail(string email)
         {
@@ -52,6 +90,31 @@ namespace TabloidMVC.Repositories
                     return userProfile;
                 }
             }
+        }
+
+        public UserProfile GetUserProfileById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(UserProfile profile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateUserProfile(UserProfile userProfile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Details(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
