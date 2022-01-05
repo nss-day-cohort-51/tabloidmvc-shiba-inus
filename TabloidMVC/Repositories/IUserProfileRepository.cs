@@ -12,7 +12,7 @@ namespace TabloidMVC.Repositories
         UserProfile GetByEmail(string email);
         UserProfile GetById(int id);
         void Delete(int id);
-        void Deactivate(UserProfile user);
+        void UpdateUserType(UserProfile user);
         void Register(UserProfile userProfile);
         void Details(int id);
         void CreateUserProfile(UserProfile userProfile);

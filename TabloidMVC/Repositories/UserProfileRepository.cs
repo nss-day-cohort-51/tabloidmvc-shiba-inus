@@ -40,7 +40,11 @@ ORDER BY DisplayName ASC";
                             Email = reader.GetString(reader.GetOrdinal("email")),
                             DisplayName = reader.GetString(reader.GetOrdinal("displayName")),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("userTypeId")),
-                            UserTypeName = reader.GetString(reader.GetOrdinal("userTypeName"))
+                            UserType = new UserType()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("userTypeId")),
+                                Name = reader.GetString(reader.GetOrdinal("userTypeName"))
+                            }
                         });
                     }
                     reader.Close();
@@ -159,7 +163,7 @@ ORDER BY DisplayName ASC";
             }
         }
 
-        public void Deactivate(UserProfile userProfile)
+        public void UpdateUserType(UserProfile userProfile)
         {
             using (var conn = Connection)
             {
@@ -208,11 +212,6 @@ ORDER BY DisplayName ASC";
         }
 
         public void CreateUserProfile(UserProfile userProfile)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
         {
             throw new NotImplementedException();
         }

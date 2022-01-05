@@ -82,30 +82,6 @@ namespace TabloidMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
-        public IActionResult Deactivate(int id)
-        {
-            UserProfile user = _userProfileRepository.GetById(id);
 
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public IActionResult Deactivate(int id, UserProfile user)
-        {
-            try
-            {
-                user.UserTypeId = 2;
-                _userProfileRepository.Deactivate(user);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-        }
     }
 }

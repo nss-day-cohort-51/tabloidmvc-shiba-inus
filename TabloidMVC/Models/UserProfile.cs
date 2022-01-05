@@ -22,7 +22,5 @@ namespace TabloidMVC.Models
                 return $"{FirstName} {LastName}";
             }
         }
-
-        public string UserTypeName { get; internal set; }
     }
 }
