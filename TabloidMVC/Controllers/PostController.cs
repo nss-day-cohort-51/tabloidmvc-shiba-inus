@@ -17,12 +17,14 @@ namespace TabloidMVC.Controllers
     public class PostController : Controller
     {
         private readonly IPostRepository _postRepository;
+        private readonly IPostTagRepository _postTagRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
+        public PostController(IPostRepository postRepository, IPostTagRepository postTagRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
+            _postTagRepository = postTagRepository;
             _categoryRepository = categoryRepository;
             _tagRepository = tagRepository;
         }
@@ -147,8 +149,8 @@ namespace TabloidMVC.Controllers
 
         public IActionResult ManageTags(int id)
         {
-            List<Tag> tags = _tagRepository.GetTagsByPostId(id);
-            return View(tags);
+            List<PostTag> postTags = _postTagRepository.GetPostTagsByPostId(id);
+            return View(postTags);
         }
 
         public IActionResult AddPostTag(int id)
@@ -174,7 +176,7 @@ namespace TabloidMVC.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction(nameof(ManageTags), vm.PostId);
+                return RedirectToAction(nameof(ManageTags), new { id = vm.PostTag.PostId });
             }
         }
 
