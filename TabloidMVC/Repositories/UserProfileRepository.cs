@@ -68,7 +68,7 @@ namespace TabloidMVC.Repositories
                               ut.[Name] AS UserTypeName
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE id = @id";
+                        WHERE u.id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
 
                     UserProfile userProfile = null;
