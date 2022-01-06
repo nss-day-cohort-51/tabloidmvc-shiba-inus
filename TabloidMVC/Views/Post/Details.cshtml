@@ -22,28 +22,8 @@
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
-<<<<<<< HEAD
-                <a asp-action="CommentDetails" asp-controller="CommentController" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View Comments">
-=======
                 <a asp-action="Index" asp-controller="Comment" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="View Comments">
->>>>>>> 4fe7963e5f5e4661f978e75d6c4ba2db90de3f26
-                    <i class="fas fa-eye"></i>
-                </a>
-                @{
-                    if (Model.IsSubscribed)
-                    {
-                        <a asp-action="Unsubscribe" asp-route-id="@Model.Post.UserProfile.Id" class="btn btn-outline-primary mx-1" title="Unsubscribe">
-                            Unsubscribe
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Subscribe" asp-route-id="@Model.Post.UserProfile.Id" class="btn btn-outline-primary mx-1" title="Subscribe">
-                            Subscribe
-                        </a>
-                    }
-                }
-
+                    <i class="fas fa-eye"></i></a>
             </div>
         </section>
         <hr />

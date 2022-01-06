@@ -9,5 +9,6 @@ namespace TabloidMVC.Models.ViewModels
     {
         public Post Post { get; set; }
         public bool IsSubscribed { get; set; }
+
     }
 }
