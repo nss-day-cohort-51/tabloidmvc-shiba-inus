@@ -53,17 +53,23 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
-            var post = _postRepository.GetPublishedPostById(id);
-            if (post == null)
+            int userId = GetCurrentUserProfileId();
+            var vm = new PostDetailsViewModel()
             {
-                int userId = GetCurrentUserProfileId();
-                post = _postRepository.GetUserPostById(id, userId);
-                if (post == null)
+                Post = _postRepository.GetPublishedPostById(id),
+            };
+            
+            if (vm.Post == null)
+            {
+                vm.Post = _postRepository.GetUserPostById(id, userId);
+                if (vm.Post == null)
                 {
                     return NotFound();
                 }
             }
-            return View(post);
+            vm.IsSubscribed = _postRepository.GetIsSubscribed(userId, vm.Post.UserProfileId);
+
+            return View(vm);
         }
 
         public IActionResult Create()
@@ -186,6 +192,20 @@ namespace TabloidMVC.Controllers
             {
                 return RedirectToAction(nameof(ManageTags), new { id = vm.PostTag.PostId });
             }
+        }
+
+        public IActionResult Subscribe(int id)
+        {
+            int currentUserId = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email)).Id;
+            _userProfileRepository.Subscribe(currentUserId, id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Unsubscribe(int id)
+        {
+            int currentUserId = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email)).Id;
+            _userProfileRepository.Unsubscribe(currentUserId, id);
+            return RedirectToAction(nameof(Index));
         }
 
     }
