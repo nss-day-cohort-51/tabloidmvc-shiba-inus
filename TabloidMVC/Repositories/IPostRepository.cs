@@ -14,5 +14,6 @@ namespace TabloidMVC.Repositories
         Post GetUserPostById(int id, int userProfileId);
         void Delete(int id);
         bool GetIsSubscribed(int id1, int id2);
+        List<Post> GetAllSubscribedPosts(int id);
     }
 }
