@@ -85,6 +85,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            int userId = GetCurrentUserProfileId();
             var vm = new PostDetailsViewModel()
             {
                 Post = _postRepository.GetPublishedPostById(id),
@@ -92,14 +93,13 @@ namespace TabloidMVC.Controllers
             
             if (vm.Post == null)
             {
-                int userId = GetCurrentUserProfileId();
                 vm.Post = _postRepository.GetUserPostById(id, userId);
                 if (vm.Post == null)
                 {
                     return NotFound();
                 }
             }
-            vm.IsSubscribed = _postRepository.GetIsSubscribed(id, vm.Post.UserProfileId);
+            vm.IsSubscribed = _postRepository.GetIsSubscribed(userId, vm.Post.UserProfileId);
 
             return View(vm);
         }
