@@ -63,7 +63,7 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                               SELECT Id, Subject, Content, CreateDateTime
+                               SELECT Id, Subject, Content, CreateDateTime, PostId
                                FROM Comment
                                WHERE Id = @id";
 
@@ -78,6 +78,7 @@ namespace TabloidMVC.Repositories
                             comment = new Comment()
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
                                 Subject = reader.GetString(reader.GetOrdinal("Subject")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))

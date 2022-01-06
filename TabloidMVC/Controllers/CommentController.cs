@@ -69,11 +69,8 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id)
         {
             var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
-            Comment comment = new Comment()
-            {
-                PostId = id,
-                UserProfileId = userProfile.Id
-            };
+            Comment comment = _commentRepository.GetCommentById(id);
+
             return View(comment);
         }
 
