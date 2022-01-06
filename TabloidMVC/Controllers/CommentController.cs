@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -17,17 +14,12 @@ namespace TabloidMVC.Controllers
 
         }
         // GET: CommentController
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-          
-            return View();
-        }
-
-        // GET: CommentController/Details/5
-        public ActionResult CommentDetails(int postId)
-        {
-            var comments = _commentRepository.GetAllCommentsByPostId(postId);
-            return View(comments);
+            var vm = new CommentViewModel();
+            vm.PostId = id;
+            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
+            return View(vm);
         }
 
         // GET: CommentController/Create

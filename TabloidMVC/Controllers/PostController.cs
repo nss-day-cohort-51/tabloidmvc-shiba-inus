@@ -35,13 +35,7 @@ namespace TabloidMVC.Controllers
             _tagRepository = tagRepository;
         }
 
-        public IActionResult CommentDetails(int id)
-        {
-            var vm = new CommentViewModel();
-            vm.PostId = id;
-            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
-            return View(vm);
-        }
+       
         //get
         public IActionResult AddComment(int id)
         {
