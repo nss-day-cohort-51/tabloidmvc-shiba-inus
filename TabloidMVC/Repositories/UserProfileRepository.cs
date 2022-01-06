@@ -236,16 +236,6 @@ ORDER BY DisplayName ASC";
 
         }
 
-        public UserProfile GetUserProfileById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(UserProfile profile)
-        {
-            throw new NotImplementedException();
-        }
-
         public void CreateUserProfile(UserProfile userProfile)
         {
             throw new NotImplementedException();

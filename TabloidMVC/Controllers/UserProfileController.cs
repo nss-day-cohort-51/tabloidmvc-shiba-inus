@@ -76,7 +76,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                _userProfileRepository.Update(userProfile);
+                _userProfileRepository.UpdateUserType(userProfile);
 
                 return RedirectToAction(nameof(Index));
             }
