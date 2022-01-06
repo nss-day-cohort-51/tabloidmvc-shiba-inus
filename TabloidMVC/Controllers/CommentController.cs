@@ -32,12 +32,7 @@ namespace TabloidMVC.Controllers
             return View();
         }
 
-        // GET: CommentController/Details/5
-        public IActionResult CommentDetails(int id)
-        {
-            var comment = _commentRepository.GetCommentById(id);
-            return View(comment);
-        }
+        
 
         // GET: CommentController/Create
         public ActionResult Create()

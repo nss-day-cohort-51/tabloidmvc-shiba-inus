@@ -37,10 +37,11 @@ namespace TabloidMVC.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("commentId")),
                             UserProfile = new UserProfile()
                             {
+                                Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                                 DisplayName = reader.GetString(reader.GetOrdinal("displayName")),
                             },
                             Post = new Post()
-                            { 
+                            {
                                 Id = reader.GetInt32(reader.GetOrdinal("postId")),
                             }
                         };
@@ -73,18 +74,18 @@ namespace TabloidMVC.Repositories
                     while (reader.Read())
                     {
                         if (comment == null)
+                        {
+                            comment = new Comment()
                             {
-                                comment = new Comment()
-                                {
-                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                    Subject = reader.GetString(reader.GetOrdinal("Subject")),
-                                    Content = reader.GetString(reader.GetOrdinal("Content")),
-                                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
-                                };
-                            }
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Subject = reader.GetString(reader.GetOrdinal("Subject")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
+                            };
+                        }
                     }
-                            reader.Close();
-                            return comment;
+                    reader.Close();
+                    return comment;
                 }
             }
         }

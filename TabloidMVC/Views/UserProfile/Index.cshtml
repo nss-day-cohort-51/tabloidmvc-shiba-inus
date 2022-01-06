@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TabloidMVC.Models.Post>
+﻿@model TabloidMVC.Models.ViewModels.UserProfileIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -6,45 +6,38 @@
 
 
 <div class="container pt-5">
-    <h1>Posts</h1>
+    <h1>Users</h1>
 
-    <p>
+    <!-- <p>
         <a class="btn btn-primary" asp-action="Create">New Post</a>
-        <select class="btn btn-primary" asp-action="Filter">Tags</select>
-    </p>
+    </p> -->
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Title)
+                    Full Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserProfileId)
+                    Display Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CategoryId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PublishDateTime)
+                    User Type
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.UserProfiles)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
+                        @Html.DisplayFor(modelItem => item.DisplayName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Category.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishDateTime)
+                        @Html.DisplayFor(modelItem => item.UserType.Name)
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="View">
@@ -56,12 +49,22 @@
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
-                        <div>
-                            <a asp-action="ManageTags" asp-route-id="@item.Id">Manage Tags</a>
-                        </div>
+                        @if (Model.IsAdmin)
+                        {
+                            <a asp-action="Deactivate" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Deactivate">
+                                Deactivate
+                            </a>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    @if (Model.IsAdmin)
+    {
+        <a asp-action="ViewDeactivated" class="btn btn-outline-primary mx-1" title="View Deactivated">
+            View Deactivated
+        </a>
+
+    }
 </div>
