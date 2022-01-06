@@ -22,7 +22,7 @@
                 <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
-                <a asp-action="CommentDetails" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="View Comments">
+                <a asp-action="Index" asp-controller="Comment" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1" title="View Comments">
                     <i class="fas fa-eye"></i>
                 </a>
                 @{

@@ -35,39 +35,7 @@ namespace TabloidMVC.Controllers
             _tagRepository = tagRepository;
         }
 
-        public IActionResult CommentDetails(int id)
-        {
-            var vm = new CommentViewModel();
-            vm.PostId = id;
-            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
-            return View(vm);
-        }
-        //get
-        public IActionResult AddComment(int id)
-        {
-            var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
-            Comment comment = new Comment()
-            {
-                PostId = id,
-                UserProfileId = userProfile.Id
-            };
-            return View(comment);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        //post
-        public IActionResult AddComment(IFormCollection collection, Comment comment)
-        {
-            try
-            {
-                _commentRepository.Add(comment);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                return View(comment);
-            }
-        }
+       
 
             public IActionResult Index()
         {
@@ -85,6 +53,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            int userId = GetCurrentUserProfileId();
             var vm = new PostDetailsViewModel()
             {
                 Post = _postRepository.GetPublishedPostById(id),
@@ -92,14 +61,13 @@ namespace TabloidMVC.Controllers
             
             if (vm.Post == null)
             {
-                int userId = GetCurrentUserProfileId();
                 vm.Post = _postRepository.GetUserPostById(id, userId);
                 if (vm.Post == null)
                 {
                     return NotFound();
                 }
             }
-            vm.IsSubscribed = _postRepository.GetIsSubscribed(id, vm.Post.UserProfileId);
+            vm.IsSubscribed = _postRepository.GetIsSubscribed(userId, vm.Post.UserProfileId);
 
             return View(vm);
         }

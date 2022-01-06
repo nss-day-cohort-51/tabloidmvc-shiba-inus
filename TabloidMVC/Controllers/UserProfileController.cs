@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 
@@ -23,8 +24,9 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController
         public ActionResult Index()
         {
-            var userProfiles = _userProfileRepository.GetAllUsers();
-            return View(userProfiles);
+            var vm = new UserProfileIndexViewModel();
+            vm.UserProfiles = _userProfileRepository.GetAllUsers();
+            return View(vm);
         }
 
         // GET: UserProfileController/Details/5
@@ -150,6 +152,22 @@ namespace TabloidMVC.Controllers
         public IActionResult DeactivateError()
         {
             return View();
+        }
+        public IActionResult ViewDeactivated()
+        {
+            var vm = new UserProfileIndexViewModel();
+            vm.UserProfiles = _userProfileRepository.GetDeactivated();
+
+            return View(vm);
+        }
+
+        public IActionResult Reactivate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            user.UserTypeId = 2;
+            _userProfileRepository.Update(user);
+
+            return RedirectToAction(nameof(Index));
         }
 
     }

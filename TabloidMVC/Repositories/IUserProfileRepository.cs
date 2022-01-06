@@ -20,5 +20,6 @@ namespace TabloidMVC.Repositories
         void Subscribe(int currentUserId, int id);
         void Unsubscribe(int currentUserId, int id);
         List<UserProfile> GetAllAdmins();
+        List<UserProfile> GetDeactivated();
     }
 }
