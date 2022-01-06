@@ -26,34 +26,43 @@ namespace TabloidMVC.Controllers
 
         }
         // GET: CommentController
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-          
-            return View();
+            var vm = new CommentViewModel();
+            vm.PostId = id;
+            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
+            return View(vm);
         }
 
-        
-
         // GET: CommentController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
+            Comment comment = new Comment()
+            {
+                PostId = id,
+                UserProfileId = userProfile.Id
+            };
+            return View(comment);
         }
 
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(IFormCollection collection, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentRepository.Add(comment);
+                return RedirectToAction("Index", new { id = comment.PostId });
             }
             catch
             {
-                return View();
+                return View(comment);
             }
         }
+
+
 
         // GET: CommentController/Edit/5
         [Authorize]
