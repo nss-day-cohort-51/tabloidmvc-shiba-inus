@@ -1,9 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using TabloidMVC.Models;
-using TabloidMVC.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TabloidMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualBasic;
+using System.Security.Claims;
+using TabloidMVC.Models.ViewModels;
+using TabloidMVC.Models;
+
 
 namespace TabloidMVC.Controllers
 {
@@ -12,6 +19,7 @@ namespace TabloidMVC.Controllers
         private readonly ICommentRepository _commentRepository;
         private readonly IUserProfileRepository _userProfileRepository;
         public CommentController(ICommentRepository commentRepository, IUserProfileRepository userProfileRepository)
+
         {
             _commentRepository = commentRepository;
             _userProfileRepository = userProfileRepository;
@@ -46,7 +54,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 _commentRepository.Add(comment);
-                return RedirectToAction("Index", new {id = comment.PostId});
+                return RedirectToAction("Index", new { id = comment.PostId });
             }
             catch
             {
@@ -54,45 +62,59 @@ namespace TabloidMVC.Controllers
             }
         }
 
+
+
         // GET: CommentController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
-            return View();
+            var userProfile = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email));
+            Comment comment = _commentRepository.GetCommentById(id);
+
+            return View(comment);
         }
 
         // POST: CommentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, IFormCollection collection, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentRepository.Update(comment);
+                return RedirectToAction("Index", new { id = comment.PostId });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(comment);
             }
         }
 
+
+
         // GET: CommentController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
-            return View();
+            var comment = _commentRepository.GetAllCommentsByPostId(id);
+           
+            return View(comment);
         }
 
         // POST: CommentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Comment comment)
         {
             try
             {
+                _commentRepository.Delete(id);
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
+            catch (Exception ex)
+            { 
+                return View(comment);
             }
         }
     }

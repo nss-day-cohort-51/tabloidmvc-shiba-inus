@@ -9,8 +9,6 @@ using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 using System.Collections.Generic;
-using System;
-using TabloidMVC.Models;
 
 namespace TabloidMVC.Controllers
 {
