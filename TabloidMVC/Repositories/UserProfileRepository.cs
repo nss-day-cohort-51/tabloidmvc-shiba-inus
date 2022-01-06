@@ -251,6 +251,45 @@ ORDER BY DisplayName ASC";
             throw new NotImplementedException();
         }
 
+        public List<UserProfile> GetAllAdmins()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT u.Id as userId, u.FirstName as firstName, u.LastName as lastName, u.Email as email, u.DisplayName as displayName, t.Id as userTypeId, t.Name as userTypeName
+                                        FROM UserProfile as u
+                                        JOIN UserType t ON t.Id = u.UserTypeId
+                                        WHERE userTypeName = 'Admin'";
+
+                    var reader = cmd.ExecuteReader();
+
+                    var admins = new List<UserProfile>();
+
+                    while (reader.Read())
+                    {
+                        admins.Add(new UserProfile()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("userId")),
+                            FirstName = reader.GetString(reader.GetOrdinal("firstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("lastName")),
+                            Email = reader.GetString(reader.GetOrdinal("email")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("displayName")),
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("userTypeId")),
+                            UserType = new UserType()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("userTypeId")),
+                                Name = reader.GetString(reader.GetOrdinal("userTypeName"))
+                            }
+                        });
+                    }
+                    reader.Close();
+
+                    return admins;
+                }
+            }
+        }
 
     }
 }

@@ -128,6 +128,15 @@ namespace TabloidMVC.Controllers
             {
                 user.UserTypeId = 3;
                 user.Id = id;
+
+                var admins = _userProfileRepository.GetAllAdmins();
+
+                // check if the list of admins not including the current id being deactivated is empty
+                if (admins.Where(admin => admin.Id != id).Count() == 0)
+                {
+                    return RedirectToAction(nameof(DeactivateError));
+                }
+
                 _userProfileRepository.UpdateUserType(user);
 
                 return RedirectToAction(nameof(Index));
@@ -136,6 +145,11 @@ namespace TabloidMVC.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        public IActionResult DeactivateError()
+        {
+            return View();
         }
 
     }
