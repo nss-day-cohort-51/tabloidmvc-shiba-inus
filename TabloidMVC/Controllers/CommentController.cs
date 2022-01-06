@@ -85,7 +85,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 _commentRepository.Update(comment);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = comment.PostId });
             }
             catch (Exception ex)
             {
