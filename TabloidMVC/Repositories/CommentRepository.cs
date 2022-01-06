@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
+using System;
 
 namespace TabloidMVC.Repositories
 {
@@ -18,7 +19,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT p.Id as postId, c.Subject, c.Content, u.DisplayName, c.CreateDateTime
+                    cmd.CommandText = @"SELECT p.Id as postId, c.Subject, c.Content, u.DisplayName, c.CreateDateTime, c.Id as commentId
                                           FROM Comment c
                                             Join UserProfile u on c.UserProfileId = u.Id
                                             Join Post p on c.PostId = p.Id
@@ -33,6 +34,7 @@ namespace TabloidMVC.Repositories
                             Subject = reader.GetString(reader.GetOrdinal("subject")),
                             Content = reader.GetString(reader.GetOrdinal("content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("createDateTime")),
+                            Id = reader.GetInt32(reader.GetOrdinal("commentId")),
                             UserProfile = new UserProfile()
                             {
                                 DisplayName = reader.GetString(reader.GetOrdinal("displayName")),
@@ -48,6 +50,41 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return comments;
+                }
+            }
+        }
+
+        public Comment GetCommentById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                               SELECT Id, Subject, Content, CreateDateTime
+                               FROM Comment
+                               WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    Comment comment = null;
+
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (comment == null)
+                            {
+                                comment = new Comment()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    Subject = reader.GetString(reader.GetOrdinal("Subject")),
+                                    Content = reader.GetString(reader.GetOrdinal("Content")),
+                                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
+                                };
+                            }
+                    }
+                            reader.Close();
+                            return comment;
                 }
             }
         }
@@ -71,6 +108,43 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
 
                     comment.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void Update(Comment comment)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+
+                    cmd.CommandText = @"UPDATE Comment
+                                        SET Subject = @subject,
+                                            Content = @content
+                                        WHERE id = @id";
+
+                    cmd.Parameters.AddWithValue("@subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@content", comment.Content);
+                    cmd.Parameters.AddWithValue("@id", comment.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM COMMENT WHERE id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

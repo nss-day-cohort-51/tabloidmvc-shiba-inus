@@ -9,8 +9,6 @@ using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 using System.Collections.Generic;
-using System;
-using TabloidMVC.Models;
 
 namespace TabloidMVC.Controllers
 {
@@ -35,13 +33,7 @@ namespace TabloidMVC.Controllers
             _tagRepository = tagRepository;
         }
 
-        public IActionResult CommentDetails(int id)
-        {
-            var vm = new CommentViewModel();
-            vm.PostId = id;
-            vm.Comments = _commentRepository.GetAllCommentsByPostId(id);
-            return View(vm);
-        }
+        
         //get
         public IActionResult AddComment(int id)
         {
@@ -68,6 +60,8 @@ namespace TabloidMVC.Controllers
                 return View(comment);
             }
         }
+        //get
+       
 
         public IActionResult Index()
         {

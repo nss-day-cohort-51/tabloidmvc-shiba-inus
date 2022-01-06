@@ -9,6 +9,7 @@ namespace TabloidMVC.Models.ViewModels
     {
         public List<Comment> Comments { get; set; }
         public int PostId { get; set; }
+        
 
     }
 }
