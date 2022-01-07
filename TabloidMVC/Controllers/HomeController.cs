@@ -26,9 +26,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Index()
         {
-            int currentUserId = _userProfileRepository.GetByEmail(User.FindFirstValue(ClaimTypes.Email)).Id;
-            List<Post> subscribedPosts = _postRepository.GetAllSubscribedPosts(currentUserId);
-            return View(subscribedPosts);
+            return View();
         }
 
         public IActionResult Privacy()
