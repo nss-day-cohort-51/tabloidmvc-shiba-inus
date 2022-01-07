@@ -10,6 +10,7 @@
 
     <p>
         <a class="btn btn-primary" asp-action="Create">New Post</a>
+        <select class="btn btn-primary" asp-action="Filter">Tags</select>
     </p>
     <table class="table table-striped">
         <thead>
@@ -55,6 +56,9 @@
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
+                        <div>
+                            <a asp-action="ManageTags" asp-route-id="@item.Id">Manage Tags</a>
+                        </div>
                     </td>
                 </tr>
             }
